@@ -1,0 +1,2 @@
+# KochSnowflake
+A fractal generator
