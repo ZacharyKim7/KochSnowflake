@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <title> Von Koch Snowflake </title>
+</head>
+
+<body>
+    <div style="text-align:center">
+        <h1><span style="font-size:34; font-family:fantasy;">Koch Snowflake</span></h1>
+        <hr><br>
+        <span style="padding:40;"><input type="button" value="-" onclick="DeIteration(); drawCurve()" style="font-size: 25; width:250px; height:50px;
+border:none; background-color: rgb(231, 186, 82);
+box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2),
+0 6px 20px 0 rgba(0,0,0,0.19);
+border-radius: 4px;"></span>
+        <span style="font-family:fantasy; font-size:34"> n = </span>
+        <span id="levelSpan" style="font-size: 34; font-family:
+fantasy;">1</span>
+        <span style="padding:40"> <input type="button" value="+" onclick="Iteration(); drawCurve()" style="font-size:25; width:250px; height:50px;
+border:none; background-color: rgb(231, 186, 82);
+box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2),
+0 6px 20px 0 rgba(0,0,0,0.19);
+border-radius: 4px;"></span></button><br><br>
+        <canvas id="canvas" width="500px" height="500px" style="border-style:solid; border-color:rgb(231, 186, 82); background-color:rgb(231, 186,
+82)">
+        </canvas>
+    </div>
+    <script type="text/javascript">
+        var Vertices = [[250, 20], [450, 20 + 200 * Math.sqrt(3)], [50, 20 + 200 * Math.sqrt(3)]];
+        var n = 1;
+        var draw = document.getElementById("canvas").getContext("2d");
+        draw.strokeStyle = "black"; draw.fillStyle = "white"; draw.lineWidth = "5";
+        function drawCurve() {
+            draw.clearRect(0, 0, 500, 500);
+            draw.beginPath();
+            draw.moveTo(Vertices[0][0], Vertices[0][1]);
+            for (var v = 1; v < Vertices.length; v = v + 1) { draw.lineTo(Vertices[v][0], Vertices[v][1]) };
+            draw.closePath(); draw.stroke(); draw.fill();
+            document.getElementById("levelSpan").innerHTML = n;
+        }
+        function Iteration() {
+            if (n == 7) { return; };
+            var Vert = Vertices.slice(0);
+            Vert[Vert.length] = Vert[0];
+            Vertices = [];
+            for (var v = 0; v <= Vert.length - 2; v = v + 1) {
+                Vertices[Vertices.length] = Vert[v];
+                var
+                    new1 = [Vert[v][0] + 1 / 3 * (Vert[v + 1][0] - Vert[v][0]), Vert[v][1] + 1 / 3 * (Vert[v + 1][1] - Vert[v][1])];
+                var
+                    new3 = [Vert[v][0] + 2 / 3 * (Vert[v + 1][0] - Vert[v][0]), Vert[v][1] + 2 / 3 * (Vert[v + 1][1] - Vert[v][1])];
+                var s = 400 / Math.pow(3, n);
+                if (new3[0] > new1[0]) {
+                    if (new3[1] > new1[1]) { new2 = [new1[0] + s, new1[1]]; }
+                    else if (new3[1] == new1[1]) { new2 = [new1[0] + s / 2, new1[1] - s / 2 * Math.sqrt(3)]; }
+                    else { new2 = [new3[0] - s, new3[1]]; };
+                }
+                else {
+                    if (new3[1] > new1[1]) { new2 = [new3[0] + s, new3[1]]; }
+                    else if (new3[1] == new1[1]) { new2 = [new1[0] - s / 2, new1[1] + s / 2 * Math.sqrt(3)]; }
+                    else { new2 = [new1[0] - s, new1[1]]; };
+                }
+                Vertices[Vertices.length] = new1; Vertices[Vertices.length] = new2;
+                Vertices[Vertices.length] = new3;
+            }
+            n = n + 1;
+        }
+        function DeIteration() {
+            if (n == 1) { return; }
+            var reverseN = n - 1;
+            n = 1; Vertices = [[250, 20], [450, 20 + 200 * Math.sqrt(3)], [50, 20 + 200 * Math.sqrt(3)]];
+            for (i = 1; i < reverseN; i = i + 1) { Iteration(); };
+        }
+        drawCurve();
+    </script>
+</body>
+
+</html>
